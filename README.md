@@ -24,7 +24,7 @@ python ContainerGuard-Parse.py CIS_Docker_Benchmark_V1.6.0.PDF
 ### Install required Python packages
 - docxtpl
 ```
-pip install docxtpl
+sudo pip install docxtpl
 ```
 
 ### Download and Extract
