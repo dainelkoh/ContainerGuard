@@ -40,4 +40,4 @@ sudo python3 ContainerGuard-Audit.py CIS_Docker_Benchmark_V1.6.0.json
 ```
 
 ### Audit Reports
-After the audit completes, audit reports `.docx` will be generated in `Audit Reports` directory. You can then use `scp` to copy out the reports to a machine that can view them.
+After the audit completes, audit reports `.docx` will be generated in `Audit Reports` directory. You can use `scp` to copy out the reports to a machine that can view them.
