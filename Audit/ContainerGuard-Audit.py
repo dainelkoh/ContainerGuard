@@ -13,7 +13,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('json_file', type=str, help='CIS Docker Benchmark JSON File')
     args = parser.parse_args()
-    benchmark_filename = args.pdf_file
+    benchmark_filename = args.json_file
 
     print(f"{'='*50}\nLOADING BENCHMARK...\n{'='*50}")
     benchmark_dictionary = load_json(benchmark_filename)
