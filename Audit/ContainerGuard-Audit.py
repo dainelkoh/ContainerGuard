@@ -1,17 +1,22 @@
+import argparse
 import json
 import os
 import re
 import subprocess
 from docxtpl import DocxTemplate, RichText
 
-BENCHMARK_JSON_FILENAME = "CIS_Docker_Benchmark_V1.6.0.json"
 DOC_TEMPLATE_FILENAME = "template.docx"
 REPORT_DIRECTORY_FILENAME = "Audit Reports"
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('json_file', type=str, help='CIS Docker Benchmark JSON File')
+    args = parser.parse_args()
+    benchmark_filename = args.pdf_file
+
     print(f"{'='*50}\nLOADING BENCHMARK...\n{'='*50}")
-    benchmark_dictionary = load_json(BENCHMARK_JSON_FILENAME)
+    benchmark_dictionary = load_json(benchmark_filename)
 
     print(f"{'='*50}\nCHECKING FOR RUNNING CONTAINER INSTANCES...\n{'='*50}")
     basic_information_dictionary = get_basic_information()

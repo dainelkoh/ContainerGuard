@@ -1,8 +1,9 @@
+import argparse
 import json
 import re
 import pdfplumber
+import sys
 
-BENCHMARK_FILENAME = "CIS_Docker_Benchmark_V1.6.0.PDF"
 START_PAGE_NO = 10
 END_PAGE_NO = 253
 NO_OF_INDENTS = 3
@@ -19,9 +20,13 @@ COMPONENTS_LIST = [
 
 
 def main():
-    benchmark_dictionary = parse_pdf(BENCHMARK_FILENAME)
-    display_dictionary(benchmark_dictionary)
-    save_json(benchmark_dictionary, ".".join(BENCHMARK_FILENAME.split(".")[:-1]) + ".json")
+    parser = argparse.ArgumentParser()
+    parser.add_argument('pdf_file', type=str, help='CIS Docker Benchmark PDF File')
+    args = parser.parse_args()
+    benchmark_filename = args.pdf_file
+
+    benchmark_dictionary = parse_pdf(benchmark_filename)
+    save_json(benchmark_dictionary, ".".join(benchmark_filename.split(".")[:-1]) + ".json")
 
 
 def parse_pdf(filename):
@@ -32,6 +37,8 @@ def parse_pdf(filename):
     titles_list = []
     audit_commands_list = []
     for i in range(START_PAGE_NO, END_PAGE_NO + 1):
+        sys.stdout.write(f"\rParsing {i - START_PAGE_NO + 1}/{END_PAGE_NO - START_PAGE_NO + 1} pages into sections...")
+        sys.stdout.flush()
         # All texts
         page = pdf.pages[i].filter(lambda obj: obj["object_type"] == "char" and obj["size"] <= 16).extract_text()
         lines = page.split("\n")
@@ -49,6 +56,7 @@ def parse_pdf(filename):
         else:
             sections_list[-1] += "\n" + "\n".join(page.split("\n")[:-1])
             audit_commands_list[-1] += "\n" + audit_commands
+    print()
 
     # Populate dictionary with contents from sections
     benchmark_dictionary = {}
@@ -72,6 +80,7 @@ def parse_pdf(filename):
 
                 section_titles[j] = title
                 subsection[title] = {}
+                print("\t" * j + title)
 
                 subsection = subsection[title]
                 break
@@ -113,22 +122,17 @@ def parse_pdf(filename):
                     value = value.strip()
 
                 subsection[COMPONENTS_LIST[j]] = value
+                print("\t" * NO_OF_INDENTS + COMPONENTS_LIST[j])
+                print("\t" * (NO_OF_INDENTS + 1) + str(subsection[COMPONENTS_LIST[j]]))
                 if COMPONENTS_LIST[j] == "Audit":
                     subsection["audit_commands"] = audit_commands
                     subsection["audit_output"] = [""] * len(audit_commands)
                     subsection["audit_errors"] = [""] * len(audit_commands)
+                    for component in ["audit_commands", "audit_output", "audit_errors"]:
+                        print("\t" * NO_OF_INDENTS + component)
+                        print("\t" * (NO_OF_INDENTS + 1) + str(subsection[component]))
 
     return benchmark_dictionary
-
-
-def display_dictionary(dictionary, indent=0):
-    for key, value in dictionary.items():
-        if isinstance(value, dict):
-            print("\t" * indent + key)
-            display_dictionary(value, indent + 1)
-        else:
-            print("\t" * indent + key)
-            print("\t" * (indent + 1) + str(value))
 
 
 def save_json(dictionary, filename):
