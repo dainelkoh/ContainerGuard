@@ -34,6 +34,8 @@ wget -O Audit.zip https://github.com/dainelkoh/ContainerGuard/blob/main/Audit.zi
 ```
 
 ### Run
+Before running the audit script, be sure to start up the containers you want to audit: `docker start <container>`.
+
 Audit Docker with CIS Docker Benchmark. Root privileges are required. The syntax is `sudo python3 ContainerGuard-Audit.py <json_file>`.
 ```
 sudo python3 ContainerGuard-Audit.py CIS_Docker_Benchmark_V1.6.0.json
