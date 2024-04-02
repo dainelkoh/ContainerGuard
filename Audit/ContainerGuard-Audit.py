@@ -53,11 +53,11 @@ def load_json(filename):
 
 def get_basic_information():
     dictionary = {}
-    dictionary["hostnames"] = subprocess.Popen("docker ps --quiet", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()[0].decode().strip("\n")
-    dictionary["ip_addresses"] = subprocess.Popen(" && ".join(["docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' " + x for x in dictionary["hostnames"].split("\n")]), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()[0].decode().strip("\n")
+    dictionary["containers"] = subprocess.Popen("docker ps --quiet", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()[0].decode().strip("\n")
+    dictionary["ip_addresses"] = subprocess.Popen(" && ".join(["docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' " + x for x in dictionary["containers"].split("\n")]), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()[0].decode().strip("\n")
     print("HOSTNAME\tIP ADDRESS")
-    for i in range(len(dictionary["hostnames"].split("\n"))):
-        print(dictionary["hostnames"].split("\n")[i] + "\t" + dictionary["ip_addresses"].split("\n")[i])
+    for i in range(len(dictionary["containers"].split("\n"))):
+        print(dictionary["containers"].split("\n")[i] + "\t" + dictionary["ip_addresses"].split("\n")[i])
     print()
     return dictionary
 
