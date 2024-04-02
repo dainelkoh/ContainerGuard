@@ -30,7 +30,7 @@ sudo pip install docxtpl
 ### Download and Extract
 Download the files into the Docker Host machine. A parsed CIS Docker Benchmark JSON file is included.
 ```
-wget -O Audit.zip https://github.com/dainelkoh/ContainerGuard/blob/main/Audit.zip?raw=true && unzip Audit.zip && cd Audit
+wget -O Audit.zip https://github.com/dainelkoh/ContainerGuard/blob/main/Audit.zip?raw=true && unzip Audit.zip
 ```
 
 ### Run
